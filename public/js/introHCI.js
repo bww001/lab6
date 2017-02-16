@@ -26,6 +26,15 @@ function addProjectDetails(e) {
 	// get rid of 'project' from the front of the id 'project3'
 	var idNumber = projectID.substr('project'.length);
 
+	$.get("/project/" +idNumber, function(projectInfo){
+		var elem = $("#" + projectID+ " .details");
+	//	$("#" + projectID+" .img").attr("src", projectInfo.image).addClass("detailsImage");
+	$("#" + projectID+ " .detailsImage").attr("src", projectInfo.image);
+		$("#" + projectID+" .title").html(projectInfo.title+ "<small> "+projectInfo.date + "</small>");
+		elem.html(projectInfo.summary);
+		console.log(elem);
+	});
+
 	console.log("User clicked on project " + idNumber);
 }
 
@@ -33,6 +42,19 @@ function addProjectDetails(e) {
  * Make an AJAX call to retrieve a color palette for the site
  * and apply it
  */
+
+
 function randomizeColors(e) {
+	$.get("/palette", makeColors);
+
 	console.log("User clicked on color button");
+}
+
+function makeColors(result){
+	var colors = result.colors.hex;
+	$('body').css('background-color', colors[0]);
+	$('.thumbnail').css('background-color', colors[1]);
+	$('h1, h2, h3, h4, h5, h5').css('color', colors[2]);
+	$('p').css('color', colors[3]);
+	$('.project img').css('opacity', .75);
 }
